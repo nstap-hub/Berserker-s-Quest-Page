@@ -1,0 +1,201 @@
+<?php
+
+require_once 'back/conexion.php';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $us = $_POST["correo"];
+    $psw = $_POST["clave"];
+    $action = $_POST["action"]; // <-- Aquí llega "login" o "register"
+
+    if ($action === "login") {
+        $sql=$cnnPDO->prepare('SELECT id, correo, clave FROM usuarios WHERE correo =:correo AND clave=:clave');
+
+            $sql->bindParam(':correo', $us);
+			$sql->bindParam(':clave', $psw);
+            
+            $sql->execute();
+              
+              if ($sql->rowCount() > 0) {
+                $user = $sql->fetch(PDO::FETCH_ASSOC);
+
+                // Guarda tanto el correo como el id_user en la sesión
+                $_SESSION["correo"] = $user['correo'];
+                $_SESSION["id"] = $user['id'];
+                header("Location: download.php");
+
+                } 
+                  else {
+                        echo "<script type='text/javascript'> alert('Correo o contraseña incorrectos'); window.location.href='profile.html'; </script>";
+            }
+    } elseif ($action === "register") {
+
+        $sql=$cnnPDO->prepare('INSERT INTO usuarios (correo, clave) VALUES (:correo, :clave)');
+
+            $sql->bindParam(':correo', $us);
+			$sql->bindParam(':clave', $psw);
+               
+            if ( $sql->execute()) {
+
+                header("Location: download.php");
+                exit();
+                } 
+                  else {
+                      echo "<script type='text/javascript'> alert('Error al registrarse'); window.location.href='profile.html'; </script>";
+            }
+    } else {
+        echo "<script type='text/javascript'> alert('Ha ocurrido un error'); window.location.href='profile.html'; </script>";
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/templatemo-cyborg-gaming.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 579 Cyborg Gaming
+
+https://templatemo.com/tm-579-cyborg-gaming
+
+-->
+  </head>
+
+<body style="background-color: black;">
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">
+                        <img src="assets/images/logo_berserker.png" alt="">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="download.html">Download</a></li>
+                        <li><a href="details.html">Details</a></li>
+                        <li><a href="profile.html" class="active">Profile <img src="assets/images/imagen_player.jpg" alt=""></a></li>
+                    </ul>   
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="page-content">
+
+        <!-- ***** Login Start ***** -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="main-profile">
+              <div class="row">
+                <div class="col-lg-4 text-center">
+                  <img src="assets/images/imagen_player.jpg" alt="Login Image" style="border-radius: 23px; width: 100%; max-width: 300px;">
+                </div>
+
+                <div class="col-lg-8 align-self-center">
+                  <div class="main-info header-text text-center">
+                    <h4>Iniciar Sesión</h4>
+                    <p>Accede para descargar el juego y ver tus estadísticas.</p>
+                    <form action="login.php" method="POST" style="max-width: 400px; margin: 0 auto; padding-top: 20px;">
+                      <div class="form-group mb-3">
+                        <input type="text" name="correo" class="form-control" placeholder="Correo Electrónico" required>
+                      </div>
+                      <div class="form-group mb-3">
+                        <input type="password" name="clave" class="form-control" placeholder="Contraseña" required>
+                      </div>
+                      <div class="main-border-button mt-3" style="padding-top: 20px;">
+                        <button type="submit" class="btn btn-outline-warning" style="padding: 10px 25px; border-radius: 25px; font-weight: 600;" name="action" value="login">
+                          <i class="fa fa-sign-in-alt"></i> Entrar
+                        </button>
+                        <button type="submit" class="btn btn-outline-warning" style="padding: 10px 25px; border-radius: 25px; font-weight: 600;" name="action" value="register">
+                          <i class="fa fa-sign-in-alt"></i> Registrarse
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ***** Login End ***** -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights reserved. 
+          
+          <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a>  Distributed By <a href="https://themewagon.com" target="_blank" >ThemeWagon</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="assets/js/isotope.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/tabs.js"></script>
+  <script src="assets/js/popup.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+
+  </body>
+
+</html>
+
