@@ -81,7 +81,7 @@ html, body {
   font-weight: 400;
   background-color: #1e1e1e;
   font-size: 16px;
-  -ms-text-size-adjust: 100%;
+  -text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -1732,6 +1732,7 @@ body {
   .gaming-library .item ul li {
     width: 16%;
   }
+  <<<<<< HEAD
 }
 
 /* ============================================
@@ -1777,3 +1778,6 @@ body {
   }
 
 }
+=======
+}
+>>>>>>> origin/main
