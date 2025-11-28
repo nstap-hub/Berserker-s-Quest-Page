@@ -1,0 +1,20 @@
+{
+  "name": "kings-castle",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+   "lint:html": "htmlhint .\"**/*.html\"",
+   "lint:css": "stylelint .\"**/*.css\"",
+    "test": "npm run lint:html && npm run lint:css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "htmlhint": "^1.8.0",
+    "jest": "^30.2.0",
+    "stylelint": "^16.26.1",
+    "stylelint-config-standard": "^39.0.1"
+  }
+}
