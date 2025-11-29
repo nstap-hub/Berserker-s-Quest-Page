@@ -13,6 +13,7 @@ permissions:
 
 jobs:
     test:
+        name: Pruebas de validación de HTML y CSS
         runs-on: ubuntu-latest
         steps:
         -   name: Checkout repository
